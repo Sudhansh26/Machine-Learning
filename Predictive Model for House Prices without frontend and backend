@@ -1,0 +1,37 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+df = pd.read_csv('/content/boston.csv')
+x = df.drop('MEDV', axis=1)
+y = df['MEDV']
+
+from sklearn.model_selection import train_test_split
+x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.30, random_state=42)
+
+from sklearn.preprocessing import StandardScaler
+scaler = StandardScaler()
+x_train = scaler.fit_transform(x_train)
+x_test = scaler.transform(x_test)
+
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import cross_val_score
+
+regression = LinearRegression()
+mse_scores = cross_val_score(regression, x_train, y_train, scoring='neg_mean_squared_error', cv=5)
+mse = np.mean(mse_scores)
+
+regression.fit(x_train, y_train)
+reg_predict = regression.predict(x_test)
+
+sns.displot(y_test - reg_predict, kind='kde')
+plt.title("Residual Distribution")
+plt.xlabel("Residuals")
+plt.show()
+
+from sklearn.metrics import r2_score
+r2 = r2_score(y_test, reg_predict)
+
+print("Cross-Validated MSE:", mse)
+print("R² Score:", r2)
