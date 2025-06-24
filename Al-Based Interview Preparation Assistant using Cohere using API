@@ -2,7 +2,7 @@ import os
 import requests
 
 
-os.environ["COHERE_API_KEY"] = "6UhUeBouXV6avo39o5583kXMIi7MnfJZNTGA1W7e"
+os.environ["COHERE_API_KEY"] = "YOUR_API_KEY"
 
 api_key = os.getenv("COHERE_API_KEY")
 
